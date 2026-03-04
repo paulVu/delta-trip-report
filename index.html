@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Delta - Báo Cáo Hành Trình</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #1a56db;
+      --primary-light: #e8effd;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --danger: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius: 12px;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+    
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .header .subtitle {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+    
+    .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+    
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .card-title .icon { font-size: 18px; }
+    
+    .saved-badge {
+      font-size: 11px;
+      background: var(--success-light);
+      color: var(--success);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+    
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+    
+    .field label .required { color: var(--danger); }
+    
+    select, input[type="text"], input[type="number"], input[type="time"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+      color: var(--gray-900);
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color 0.2s;
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+    
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+    }
+    
+    textarea { resize: vertical; min-height: 60px; }
+    
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .chip {
+      padding: 8px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      background: white;
+    }
+    
+    .chip.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .chip:active { transform: scale(0.95); }
+    
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn:active { transform: scale(0.98); }
+    
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-outline {
+      background: white;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Tab bar */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      background: var(--gray-200);
+      border-radius: 10px;
+      padding: 4px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--gray-500);
+    }
+    
+    .tab.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    /* Pending trip card */
+    .pending-trip {
+      background: #fffbeb;
+      border: 1.5px solid #fbbf24;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .pending-trip:active { transform: scale(0.98); }
+    
+    .pending-trip .trip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .pending-trip .trip-location {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    
+    .pending-trip .trip-time {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    
+    .pending-trip .trip-details {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-500);
+    }
+    
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--gray-900);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .hidden { display: none !important; }
+    
+    /* Profile setup overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 200;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <h1>🚛 Báo Cáo Hành Trình</h1>
+  <div class="subtitle" id="driverInfo">Delta International</div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="container">
+  
+  <!-- Tab bar -->
+  <div class="tabs">
+    <div class="tab active" data-tab="arrive" onclick="switchTab('arrive')">📍 Đến nơi</div>
+    <div class="tab" data-tab="pending" onclick="switchTab('pending')">⏳ Chờ rời đi</div>
+  </div>
+  
+  <!-- ===== ARRIVE TAB ===== -->
+  <div id="tab-arrive">
+    
+    <!-- Driver Profile (saved) -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">👤</span> Thông tin lái xe
+        <span class="saved-badge" id="profileBadge">✓ Đã lưu</span>
+      </div>
+      
+      <div class="field">
+        <label>Tên lái xe <span class="required">*</span></label>
+        <select id="driver">
+          <option value="">— Chọn —</option>
+          <option>Lê Anh Toàn</option>
+          <option>Lê Thanh Tú</option>
+          <option>Lê Thanh Tuấn</option>
+          <option>Phạm Ngọc Tân</option>
+        </select>
+      </div>
+      
+      <div class="field">
+        <label>Mã số xe / Biển số xe <span class="required">*</span></label>
+        <select id="vehicle">
+          <option value="">— Chọn —</option>
+          <option>50E-196.22</option>
+          <option>50H-180.03</option>
+          <option>50H-180.05</option>
+        </select>
+      </div>
+      
+      <div class="field">
+        <label>Biển số romooc</label>
+        <select id="trailer">
+          <option value="">— Chọn —</option>
+          <option>15R-091.48</option>
+          <option>15R-129.37</option>
+          <option>15RM-073.29</option>
+          <option>15R-063.45</option>
+          <option>15R-000.70</option>
+          <option>15R-050.20</option>
+          <option>50RM-128.66</option>
+          <option>29R-008.57</option>
+          <option>15RM-030.82</option>
+          <option>15RM-034.80</option>
+          <option>29R-043.01</option>
+          <option>15R-013.66</option>
+          <option value="Không Mooc">Không Mooc</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Trip details -->
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> Chi tiết chuyến</div>
+      
+      <div class="field">
+        <label>Thời gian đến nơi</label>
+        <input type="time" id="arriveTime">
+      </div>
+      
+      <div class="field">
+        <label>Địa điểm <span class="required">*</span></label>
+        <select id="location">
+          <option value="">— Chọn —</option>
+          <option>Cảng Bình Dương</option>
+          <option>Tân Cảng Tân Vạn</option>
+          <option>Sowatco Long Bình</option>
+          <option>Nam Khánh Sóng Thần</option>
+          <option>Nam Khánh Đồng Nai</option>
+          <option>G-Fortune Thủ Đức 3</option>
+          <option>ICD Phước Long 1</option>
+          <option>ICD Phước Long 3</option>
+          <option>Tanamexco</option>
+          <option>Cát Lái</option>
+          <option>Kho TBS</option>
+          <option>Bãi Delta</option>
+          <option>AP622</option>
+        </select>
+      </div>
+      
+      <div class="field">
+        <label>Số lô <span class="required">*</span></label>
+        <select id="lot">
+          <option value="">— Chọn —</option>
+          <option>MEV25</option><option>MEV26</option><option>MEV27</option>
+          <option>MEV28</option><option>MEV29</option><option>MEV30</option>
+          <option>MEV31</option><option>MEV32</option><option>MEV33</option>
+          <option>MEV34</option><option>MEV35</option><option>MEV36</option>
+          <option>MEV37</option><option>MEV38</option><option>MEV39</option>
+          <option>MEV40</option><option>MEV41</option><option>MEV42</option>
+          <option>MEV43</option><option>MEV44</option><option>MEV45</option>
+          <option>MEV46</option><option>MEV47</option><option>MEV48</option>
+        </select>
+      </div>
+      
+      <div class="field">
+        <label>Số km trên đồng hồ</label>
+        <input type="number" id="km" placeholder="VD: 1500" inputmode="numeric">
+      </div>
+      
+      <div class="field">
+        <label>% pin trên đồng hồ</label>
+        <input type="text" id="battery" placeholder="VD: 85%" inputmode="text">
+      </div>
+      
+      <div class="field">
+        <label>Nghiệp vụ <span class="required">*</span></label>
+        <div class="chips" id="taskChips">
+          <div class="chip" data-value="Lấy rỗng">Lấy rỗng</div>
+          <div class="chip" data-value="Hạ cont đầy">Hạ cont đầy</div>
+          <div class="chip" data-value="Về bãi sạc">Về bãi sạc</div>
+          <div class="chip" data-value="Về lấy mooc">Về lấy mooc</div>
+          <div class="chip" data-value="Về đổ dầu">Về đổ dầu</div>
+          <div class="chip" data-value="Về sửa chữa">Về sửa chữa</div>
+        </div>
+      </div>
+      
+      <div class="field">
+        <label>Ghi chú</label>
+        <textarea id="note" placeholder="Ghi chú thêm (nếu có)"></textarea>
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" onclick="submitArrive()" id="btnArrive">
+      📍 Ghi nhận ĐẾN NƠI
+    </button>
+  </div>
+  
+  <!-- ===== PENDING TAB ===== -->
+  <div id="tab-pending" class="hidden">
+    <div id="pendingList">
+      <div class="empty-state">
+        <div class="icon">✅</div>
+        <p>Không có chuyến nào đang chờ</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===== DEPART FORM (shown when clicking pending trip) ===== -->
+  <div id="tab-depart" class="hidden">
+    <div class="card">
+      <div class="card-title"><span class="icon">📍</span> Thông tin đến nơi</div>
+      <div id="departArriveInfo" style="font-size:14px; color:var(--gray-500); line-height:1.6;"></div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title"><span class="icon">🚀</span> Thông tin rời đi</div>
+      
+      <div class="field">
+        <label>Biển số romooc (Chỉnh sửa)</label>
+        <select id="departTrailer">
+          <option value="">— Giữ nguyên —</option>
+          <option>15R-091.48</option>
+          <option>15R-129.37</option>
+          <option>15RM-073.29</option>
+          <option>15R-063.45</option>
+          <option>15R-000.70</option>
+          <option>15R-050.20</option>
+          <option>50RM-128.66</option>
+          <option>29R-008.57</option>
+          <option>15RM-030.82</option>
+          <option>15RM-034.80</option>
+          <option>29R-043.01</option>
+          <option>15R-013.66</option>
+          <option value="Không Mooc">Không Mooc</option>
+        </select>
+      </div>
+      
+      <div class="field">
+        <label>Số km trên đồng hồ</label>
+        <input type="number" id="departKm" placeholder="VD: 1520" inputmode="numeric">
+      </div>
+      
+      <div class="field">
+        <label>% pin trên đồng hồ</label>
+        <input type="text" id="departBattery" placeholder="VD: 80%" inputmode="text">
+      </div>
+      
+      <div class="field">
+        <label>Số lô (khi rời đi)</label>
+        <select id="departLot">
+          <option value="">— Chọn —</option>
+          <option>MEV25</option><option>MEV26</option><option>MEV27</option>
+          <option>MEV28</option><option>MEV29</option><option>MEV30</option>
+          <option>MEV31</option><option>MEV32</option><option>MEV33</option>
+          <option>MEV34</option><option>MEV35</option><option>MEV36</option>
+          <option>MEV37</option><option>MEV38</option><option>MEV39</option>
+          <option>MEV40</option><option>MEV41</option><option>MEV42</option>
+          <option>MEV43</option><option>MEV44</option><option>MEV45</option>
+          <option>MEV46</option><option>MEV47</option><option>MEV48</option>
+        </select>
+      </div>
+      
+      <div class="field">
+        <label>Nghiệp vụ (khi rời đi)</label>
+        <div class="chips" id="departTaskChips">
+          <div class="chip" data-value="Lấy rỗng">Lấy rỗng</div>
+          <div class="chip" data-value="Hạ cont đầy">Hạ cont đầy</div>
+          <div class="chip" data-value="Về lấy mooc">Về lấy mooc</div>
+          <div class="chip" data-value="Về trả mooc">Về trả mooc</div>
+          <div class="chip" data-value="Về bãi sạc">Về bãi sạc</div>
+          <div class="chip" data-value="Về sửa chữa">Về sửa chữa</div>
+          <div class="chip" data-value="Về đổi ca">Về đổi ca</div>
+          <div class="chip" data-value="Về đổi xe">Về đổi xe</div>
+        </div>
+      </div>
+      
+      <div class="field">
+        <label>Ghi chú</label>
+        <textarea id="departNote" placeholder="Ghi chú thêm (nếu có)"></textarea>
+      </div>
+    </div>
+    
+    <button class="btn btn-success" onclick="submitDepart()" id="btnDepart">
+      🚀 Ghi nhận RỜI ĐI
+    </button>
+    <div style="height:12px"></div>
+    <button class="btn btn-outline" onclick="switchTab('pending')">← Quay lại</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CONFIG =====
+// Replace with your deployed Apps Script Web App URL
+const API_URL = 'https://script.google.com/macros/s/AKfycbwcf1tflTjDsEKIyQIlBU_21AYDX5w7JJP-_C6xE7scMYUgVi_NHX3tCOWeE7Pqr7eu/exec';
+
+// ===== STATE =====
+let currentDepartRowId = null;
+let pendingTrips = [];
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  loadProfile();
+  setCurrentTime();
+  initChips();
+  
+  // Auto-save profile on change
+  ['driver', 'vehicle', 'trailer'].forEach(id => {
+    document.getElementById(id).addEventListener('change', saveProfile);
+  });
+});
+
+// ===== PROFILE (localStorage) =====
+function loadProfile() {
+  const profile = JSON.parse(localStorage.getItem('deltaProfile') || '{}');
+  if (profile.driver) document.getElementById('driver').value = profile.driver;
+  if (profile.vehicle) document.getElementById('vehicle').value = profile.vehicle;
+  if (profile.trailer) document.getElementById('trailer').value = profile.trailer;
+  
+  updateDriverInfo();
+  
+  if (!profile.driver) {
+    document.getElementById('profileBadge').textContent = 'Chưa lưu';
+    document.getElementById('profileBadge').style.background = '#fee2e2';
+    document.getElementById('profileBadge').style.color = '#dc2626';
+  }
+}
+
+function saveProfile() {
+  const profile = {
+    driver: document.getElementById('driver').value,
+    vehicle: document.getElementById('vehicle').value,
+    trailer: document.getElementById('trailer').value,
+  };
+  localStorage.setItem('deltaProfile', JSON.stringify(profile));
+  
+  document.getElementById('profileBadge').textContent = '✓ Đã lưu';
+  document.getElementById('profileBadge').style.background = '';
+  document.getElementById('profileBadge').style.color = '';
+  
+  updateDriverInfo();
+}
+
+function updateDriverInfo() {
+  const driver = document.getElementById('driver').value;
+  const vehicle = document.getElementById('vehicle').value;
+  document.getElementById('driverInfo').textContent = 
+    driver ? `${driver} • ${vehicle || 'Chưa chọn xe'}` : 'Delta International';
+}
+
+// ===== TIME =====
+function setCurrentTime() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('arriveTime').value = `${h}:${m}`;
+}
+
+// ===== CHIPS (multi-select) =====
+function initChips() {
+  document.querySelectorAll('.chips').forEach(container => {
+    container.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('selected');
+      });
+    });
+  });
+}
+
+function getSelectedChips(containerId) {
+  const chips = document.querySelectorAll(`#${containerId} .chip.selected`);
+  return Array.from(chips).map(c => c.dataset.value).join(', ');
+}
+
+function clearChips(containerId) {
+  document.querySelectorAll(`#${containerId} .chip`).forEach(c => c.classList.remove('selected'));
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add('active');
+  
+  document.getElementById('tab-arrive').classList.toggle('hidden', tab !== 'arrive');
+  document.getElementById('tab-pending').classList.toggle('hidden', tab !== 'pending');
+  document.getElementById('tab-depart').classList.toggle('hidden', tab !== 'depart');
+  
+  if (tab === 'pending') loadPending();
+  if (tab === 'arrive') setCurrentTime();
+}
+
+// ===== SUBMIT ARRIVE =====
+async function submitArrive() {
+  const driver = document.getElementById('driver').value;
+  const vehicle = document.getElementById('vehicle').value;
+  const location = document.getElementById('location').value;
+  const lot = document.getElementById('lot').value;
+  const task = getSelectedChips('taskChips');
+  
+  if (!driver || !vehicle || !location || !lot || !task) {
+    showToast('❌ Vui lòng điền đầy đủ thông tin bắt buộc');
+    return;
+  }
+  
+  const btn = document.getElementById('btnArrive');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang gửi...';
+  
+  try {
+    const payload = {
+      action: 'arrive',
+      time: document.getElementById('arriveTime').value + ':00',
+      vehicle: vehicle,
+      trailer: document.getElementById('trailer').value,
+      driver: driver,
+      location: location,
+      lot: lot,
+      km: document.getElementById('km').value,
+      battery: document.getElementById('battery').value,
+      task: task,
+      note: document.getElementById('note').value,
+    };
+    
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      // Save to local pending
+      const localPending = JSON.parse(localStorage.getItem('deltaPending') || '[]');
+      localPending.push({
+        rowId: data.rowId,
+        time: payload.time,
+        vehicle: payload.vehicle,
+        trailer: payload.trailer,
+        location: payload.location,
+        lot: payload.lot,
+        km: payload.km,
+        battery: payload.battery,
+        task: payload.task,
+      });
+      localStorage.setItem('deltaPending', JSON.stringify(localPending));
+      
+      showToast('✅ Đã ghi nhận đến nơi!');
+      resetArriveForm();
+    } else {
+      showToast('❌ Lỗi: ' + (data.error || 'Không rõ'));
+    }
+  } catch (err) {
+    showToast('❌ Lỗi kết nối: ' + err.message);
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '📍 Ghi nhận ĐẾN NƠI';
+}
+
+function resetArriveForm() {
+  // Keep driver profile, reset trip fields
+  document.getElementById('location').value = '';
+  document.getElementById('lot').value = '';
+  document.getElementById('km').value = '';
+  document.getElementById('battery').value = '';
+  document.getElementById('note').value = '';
+  clearChips('taskChips');
+  setCurrentTime();
+}
+
+// ===== PENDING TRIPS =====
+function loadPending() {
+  const localPending = JSON.parse(localStorage.getItem('deltaPending') || '[]');
+  const list = document.getElementById('pendingList');
+  
+  if (localPending.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">✅</div>
+        <p>Không có chuyến nào đang chờ rời đi</p>
+      </div>`;
+    return;
+  }
+  
+  list.innerHTML = localPending.map((trip, idx) => `
+    <div class="pending-trip" onclick="openDepart(${idx})">
+      <div class="trip-header">
+        <span class="trip-location">📍 ${trip.location}</span>
+        <span class="trip-time">${trip.time}</span>
+      </div>
+      <div class="trip-details">
+        ${trip.vehicle} • ${trip.trailer || 'Không mooc'} • ${trip.lot} • ${trip.task}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== DEPART FORM =====
+function openDepart(idx) {
+  const localPending = JSON.parse(localStorage.getItem('deltaPending') || '[]');
+  const trip = localPending[idx];
+  if (!trip) return;
+  
+  currentDepartRowId = trip.rowId;
+  
+  // Show arrival info
+  document.getElementById('departArriveInfo').innerHTML = `
+    <strong>${trip.location}</strong><br>
+    🕐 ${trip.time} • 🚛 ${trip.vehicle} • ${trip.trailer || 'Không mooc'}<br>
+    📦 ${trip.lot} • ${trip.task}<br>
+    ${trip.km ? '📏 ' + trip.km + ' km' : ''} ${trip.battery ? '🔋 ' + trip.battery : ''}
+  `;
+  
+  // Pre-fill trailer from arrival
+  if (trip.trailer) {
+    document.getElementById('departTrailer').value = trip.trailer;
+  }
+  
+  // Clear depart form
+  document.getElementById('departKm').value = '';
+  document.getElementById('departBattery').value = '';
+  document.getElementById('departLot').value = '';
+  document.getElementById('departNote').value = '';
+  clearChips('departTaskChips');
+  
+  // Store index for removal after submit
+  document.getElementById('tab-depart').dataset.pendingIdx = idx;
+  
+  switchTab('depart');
+}
+
+async function submitDepart() {
+  const btn = document.getElementById('btnDepart');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang gửi...';
+  
+  try {
+    const payload = {
+      action: 'depart',
+      rowId: currentDepartRowId,
+      trailer: document.getElementById('departTrailer').value,
+      km: document.getElementById('departKm').value,
+      battery: document.getElementById('departBattery').value,
+      lot: document.getElementById('departLot').value,
+      task: getSelectedChips('departTaskChips'),
+      note: document.getElementById('departNote').value,
+    };
+    
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      // Remove from local pending
+      const idx = parseInt(document.getElementById('tab-depart').dataset.pendingIdx);
+      const localPending = JSON.parse(localStorage.getItem('deltaPending') || '[]');
+      localPending.splice(idx, 1);
+      localStorage.setItem('deltaPending', JSON.stringify(localPending));
+      
+      showToast('✅ Đã ghi nhận rời đi!');
+      switchTab('pending');
+    } else {
+      showToast('❌ Lỗi: ' + (data.error || 'Không rõ'));
+    }
+  } catch (err) {
+    showToast('❌ Lỗi kết nối: ' + err.message);
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '🚀 Ghi nhận RỜI ĐI';
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
