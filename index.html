@@ -322,43 +322,17 @@
       
       <div class="field">
         <label>Tên lái xe <span class="required">*</span></label>
-        <select id="driver">
-          <option value="">— Chọn —</option>
-          <option>Lê Anh Toàn</option>
-          <option>Lê Thanh Tú</option>
-          <option>Lê Thanh Tuấn</option>
-          <option>Phạm Ngọc Tân</option>
-        </select>
+        <select id="driver"><option value="">Đang tải...</option></select>
       </div>
       
       <div class="field">
         <label>Mã số xe / Biển số xe <span class="required">*</span></label>
-        <select id="vehicle">
-          <option value="">— Chọn —</option>
-          <option>50E-196.22</option>
-          <option>50H-180.03</option>
-          <option>50H-180.05</option>
-        </select>
+        <select id="vehicle"><option value="">Đang tải...</option></select>
       </div>
       
       <div class="field">
         <label>Biển số romooc</label>
-        <select id="trailer">
-          <option value="">— Chọn —</option>
-          <option>15R-091.48</option>
-          <option>15R-129.37</option>
-          <option>15RM-073.29</option>
-          <option>15R-063.45</option>
-          <option>15R-000.70</option>
-          <option>15R-050.20</option>
-          <option>50RM-128.66</option>
-          <option>29R-008.57</option>
-          <option>15RM-030.82</option>
-          <option>15RM-034.80</option>
-          <option>29R-043.01</option>
-          <option>15R-013.66</option>
-          <option value="Không Mooc">Không Mooc</option>
-        </select>
+        <select id="trailer"><option value="">Đang tải...</option></select>
       </div>
     </div>
     
@@ -373,37 +347,12 @@
       
       <div class="field">
         <label>Địa điểm <span class="required">*</span></label>
-        <select id="location">
-          <option value="">— Chọn —</option>
-          <option>Cảng Bình Dương</option>
-          <option>Tân Cảng Tân Vạn</option>
-          <option>Sowatco Long Bình</option>
-          <option>Nam Khánh Sóng Thần</option>
-          <option>Nam Khánh Đồng Nai</option>
-          <option>G-Fortune Thủ Đức 3</option>
-          <option>ICD Phước Long 1</option>
-          <option>ICD Phước Long 3</option>
-          <option>Tanamexco</option>
-          <option>Cát Lái</option>
-          <option>Kho TBS</option>
-          <option>Bãi Delta</option>
-          <option>AP622</option>
-        </select>
+        <select id="location"><option value="">Đang tải...</option></select>
       </div>
       
       <div class="field">
         <label>Số lô <span class="required">*</span></label>
-        <select id="lot">
-          <option value="">— Chọn —</option>
-          <option>MEV25</option><option>MEV26</option><option>MEV27</option>
-          <option>MEV28</option><option>MEV29</option><option>MEV30</option>
-          <option>MEV31</option><option>MEV32</option><option>MEV33</option>
-          <option>MEV34</option><option>MEV35</option><option>MEV36</option>
-          <option>MEV37</option><option>MEV38</option><option>MEV39</option>
-          <option>MEV40</option><option>MEV41</option><option>MEV42</option>
-          <option>MEV43</option><option>MEV44</option><option>MEV45</option>
-          <option>MEV46</option><option>MEV47</option><option>MEV48</option>
-        </select>
+        <select id="lot"><option value="">Đang tải...</option></select>
       </div>
       
       <div class="field">
@@ -418,14 +367,7 @@
       
       <div class="field">
         <label>Nghiệp vụ <span class="required">*</span></label>
-        <div class="chips" id="taskChips">
-          <div class="chip" data-value="Lấy rỗng">Lấy rỗng</div>
-          <div class="chip" data-value="Hạ cont đầy">Hạ cont đầy</div>
-          <div class="chip" data-value="Về bãi sạc">Về bãi sạc</div>
-          <div class="chip" data-value="Về lấy mooc">Về lấy mooc</div>
-          <div class="chip" data-value="Về đổ dầu">Về đổ dầu</div>
-          <div class="chip" data-value="Về sửa chữa">Về sửa chữa</div>
-        </div>
+        <div class="chips" id="taskChips"><!-- loaded dynamically --></div>
       </div>
       
       <div class="field">
@@ -461,22 +403,7 @@
       
       <div class="field">
         <label>Biển số romooc (Chỉnh sửa)</label>
-        <select id="departTrailer">
-          <option value="">— Giữ nguyên —</option>
-          <option>15R-091.48</option>
-          <option>15R-129.37</option>
-          <option>15RM-073.29</option>
-          <option>15R-063.45</option>
-          <option>15R-000.70</option>
-          <option>15R-050.20</option>
-          <option>50RM-128.66</option>
-          <option>29R-008.57</option>
-          <option>15RM-030.82</option>
-          <option>15RM-034.80</option>
-          <option>29R-043.01</option>
-          <option>15R-013.66</option>
-          <option value="Không Mooc">Không Mooc</option>
-        </select>
+        <select id="departTrailer"><option value="">— Giữ nguyên —</option></select>
       </div>
       
       <div class="field">
@@ -491,31 +418,12 @@
       
       <div class="field">
         <label>Số lô (khi rời đi)</label>
-        <select id="departLot">
-          <option value="">— Chọn —</option>
-          <option>MEV25</option><option>MEV26</option><option>MEV27</option>
-          <option>MEV28</option><option>MEV29</option><option>MEV30</option>
-          <option>MEV31</option><option>MEV32</option><option>MEV33</option>
-          <option>MEV34</option><option>MEV35</option><option>MEV36</option>
-          <option>MEV37</option><option>MEV38</option><option>MEV39</option>
-          <option>MEV40</option><option>MEV41</option><option>MEV42</option>
-          <option>MEV43</option><option>MEV44</option><option>MEV45</option>
-          <option>MEV46</option><option>MEV47</option><option>MEV48</option>
-        </select>
+        <select id="departLot"><option value="">— Chọn —</option></select>
       </div>
       
       <div class="field">
         <label>Nghiệp vụ (khi rời đi)</label>
-        <div class="chips" id="departTaskChips">
-          <div class="chip" data-value="Lấy rỗng">Lấy rỗng</div>
-          <div class="chip" data-value="Hạ cont đầy">Hạ cont đầy</div>
-          <div class="chip" data-value="Về lấy mooc">Về lấy mooc</div>
-          <div class="chip" data-value="Về trả mooc">Về trả mooc</div>
-          <div class="chip" data-value="Về bãi sạc">Về bãi sạc</div>
-          <div class="chip" data-value="Về sửa chữa">Về sửa chữa</div>
-          <div class="chip" data-value="Về đổi ca">Về đổi ca</div>
-          <div class="chip" data-value="Về đổi xe">Về đổi xe</div>
-        </div>
+        <div class="chips" id="departTaskChips"><!-- loaded dynamically --></div>
       </div>
       
       <div class="field">
@@ -538,7 +446,7 @@
 <script>
 // ===== CONFIG =====
 // Replace with your deployed Apps Script Web App URL
-const API_URL = 'https://script.google.com/macros/s/AKfycbyUU7_wJMTJRHfEPBce10CDsE023T0Y8VSbbe7c2R2tvmaYL1z8i0DF8U2__gsbN1sS/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzDyjhAhngx-D1N_P-WWMR1Hx2XEjHB78SEGJPXWkLoPD3rSMu2PCoe5XbEJ4t_fTd_/exec';
 
 // ===== STATE =====
 let currentDepartRowId = null;
@@ -552,16 +460,64 @@ async function postToAPI(payload) {
 }
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadConfig();
   loadProfile();
   setCurrentTime();
-  initChips();
   
   // Auto-save profile on change
   ['driver', 'vehicle', 'trailer'].forEach(id => {
     document.getElementById(id).addEventListener('change', saveProfile);
   });
 });
+
+// ===== LOAD CONFIG FROM SHEET =====
+async function loadConfig() {
+  try {
+    const data = await postToAPI({ action: 'getConfig' });
+    if (!data.config) throw new Error('No config');
+    const c = data.config;
+    
+    populateSelect('driver', c.drivers);
+    populateSelect('vehicle', c.vehicles);
+    populateSelect('trailer', c.trailers);
+    populateSelect('location', c.locations);
+    populateSelect('lot', c.lots);
+    populateSelect('departTrailer', c.trailers, '— Giữ nguyên —');
+    populateSelect('departLot', c.lots);
+    populateChips('taskChips', c.tasksArrive);
+    populateChips('departTaskChips', c.tasksDepart);
+  } catch (err) {
+    console.error('Config load failed:', err);
+    showToast('⚠️ Không tải được cấu hình');
+  }
+}
+
+function populateSelect(id, items, placeholder) {
+  const sel = document.getElementById(id);
+  if (!sel) return;
+  sel.innerHTML = `<option value="">${placeholder || '— Chọn —'}</option>`;
+  (items || []).forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item;
+    opt.textContent = item;
+    sel.appendChild(opt);
+  });
+}
+
+function populateChips(containerId, items) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  (items || []).forEach(item => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.dataset.value = item;
+    chip.textContent = item;
+    chip.addEventListener('click', () => chip.classList.toggle('selected'));
+    container.appendChild(chip);
+  });
+}
 
 // ===== PROFILE (localStorage) =====
 function loadProfile() {
@@ -610,16 +566,6 @@ function setCurrentTime() {
 }
 
 // ===== CHIPS (multi-select) =====
-function initChips() {
-  document.querySelectorAll('.chips').forEach(container => {
-    container.querySelectorAll('.chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        chip.classList.toggle('selected');
-      });
-    });
-  });
-}
-
 function getSelectedChips(containerId) {
   const chips = document.querySelectorAll(`#${containerId} .chip.selected`);
   return Array.from(chips).map(c => c.dataset.value).join(', ');
