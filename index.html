@@ -331,7 +331,7 @@
       </div>
       
       <div class="field">
-        <label>Biển số romooc</label>
+        <label>Biển số romooc <span class="required">*</span></label>
         <select id="trailer"><option value="">Đang tải...</option></select>
       </div>
     </div>
@@ -341,7 +341,7 @@
       <div class="card-title"><span class="icon">📋</span> Chi tiết chuyến</div>
       
       <div class="field">
-        <label>Thời gian đến nơi</label>
+        <label>Thời gian đến nơi <span class="required">*</span></label>
         <input type="time" id="arriveTime">
       </div>
       
@@ -356,12 +356,12 @@
       </div>
       
       <div class="field">
-        <label>Số km trên đồng hồ</label>
+        <label>Số km trên đồng hồ <span class="required">*</span></label>
         <input type="number" id="km" placeholder="VD: 1500" inputmode="numeric">
       </div>
       
       <div class="field">
-        <label>% pin trên đồng hồ</label>
+        <label>% pin trên đồng hồ <span class="required">*</span></label>
         <input type="text" id="battery" placeholder="VD: 85%" inputmode="text">
       </div>
       
@@ -402,27 +402,27 @@
       <div class="card-title"><span class="icon">🚀</span> Thông tin rời đi</div>
       
       <div class="field">
-        <label>Biển số romooc (Chỉnh sửa)</label>
+        <label>Biển số romooc (Chỉnh sửa) <span class="required">*</span></label>
         <select id="departTrailer"><option value="">— Giữ nguyên —</option></select>
       </div>
       
       <div class="field">
-        <label>Số km trên đồng hồ</label>
+        <label>Số km trên đồng hồ <span class="required">*</span></label>
         <input type="number" id="departKm" placeholder="VD: 1520" inputmode="numeric">
       </div>
       
       <div class="field">
-        <label>% pin trên đồng hồ</label>
+        <label>% pin trên đồng hồ <span class="required">*</span></label>
         <input type="text" id="departBattery" placeholder="VD: 80%" inputmode="text">
       </div>
       
       <div class="field">
-        <label>Số lô (khi rời đi)</label>
+        <label>Số lô (khi rời đi) <span class="required">*</span></label>
         <select id="departLot"><option value="">— Chọn —</option></select>
       </div>
       
       <div class="field">
-        <label>Nghiệp vụ (khi rời đi)</label>
+        <label>Nghiệp vụ (khi rời đi) <span class="required">*</span></label>
         <div class="chips" id="departTaskChips"><!-- loaded dynamically --></div>
       </div>
       
@@ -592,11 +592,15 @@ function switchTab(tab) {
 async function submitArrive() {
   const driver = document.getElementById('driver').value;
   const vehicle = document.getElementById('vehicle').value;
+  const trailer = document.getElementById('trailer').value;
+  const time = document.getElementById('arriveTime').value;
   const location = document.getElementById('location').value;
   const lot = document.getElementById('lot').value;
+  const km = document.getElementById('km').value;
+  const battery = document.getElementById('battery').value;
   const task = getSelectedChips('taskChips');
   
-  if (!driver || !vehicle || !location || !lot || !task) {
+  if (!driver || !vehicle || !trailer || !time || !location || !lot || !km || !battery || !task) {
     showToast('❌ Vui lòng điền đầy đủ thông tin bắt buộc');
     return;
   }
@@ -724,6 +728,17 @@ function openDepart(idx) {
 }
 
 async function submitDepart() {
+  const departTrailer = document.getElementById('departTrailer').value;
+  const departKm = document.getElementById('departKm').value;
+  const departBattery = document.getElementById('departBattery').value;
+  const departLot = document.getElementById('departLot').value;
+  const departTask = getSelectedChips('departTaskChips');
+  
+  if (!departTrailer || !departKm || !departBattery || !departLot || !departTask) {
+    showToast('❌ Vui lòng điền đầy đủ thông tin bắt buộc');
+    return;
+  }
+  
   const btn = document.getElementById('btnDepart');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Đang gửi...';
@@ -732,11 +747,11 @@ async function submitDepart() {
     const payload = {
       action: 'depart',
       rowId: currentDepartRowId,
-      trailer: document.getElementById('departTrailer').value,
-      km: document.getElementById('departKm').value,
-      battery: document.getElementById('departBattery').value,
-      lot: document.getElementById('departLot').value,
-      task: getSelectedChips('departTaskChips'),
+      trailer: departTrailer,
+      km: departKm,
+      battery: departBattery,
+      lot: departLot,
+      task: departTask,
       note: document.getElementById('departNote').value,
     };
     
