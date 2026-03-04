@@ -538,11 +538,18 @@
 <script>
 // ===== CONFIG =====
 // Replace with your deployed Apps Script Web App URL
-const API_URL = 'https://script.google.com/macros/s/AKfycbwcf1tflTjDsEKIyQIlBU_21AYDX5w7JJP-_C6xE7scMYUgVi_NHX3tCOWeE7Pqr7eu/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyUU7_wJMTJRHfEPBce10CDsE023T0Y8VSbbe7c2R2tvmaYL1z8i0DF8U2__gsbN1sS/exec';
 
 // ===== STATE =====
 let currentDepartRowId = null;
 let pendingTrips = [];
+
+// ===== API HELPER (uses GET to avoid Google Workspace CORS issues) =====
+async function postToAPI(payload) {
+  const url = API_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+  const res = await fetch(url);
+  return await res.json();
+}
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -667,13 +674,7 @@ async function submitArrive() {
       note: document.getElementById('note').value,
     };
     
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    
-    const data = await res.json();
+    const data = await postToAPI(payload);
     
     if (data.success) {
       // Save to local pending
@@ -799,7 +800,7 @@ async function submitDepart() {
       body: JSON.stringify(payload),
     });
     
-    const data = await res.json();
+    const data = await postToAPI(payload);
     
     if (data.success) {
       // Remove from local pending
